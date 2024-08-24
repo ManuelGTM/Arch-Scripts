@@ -97,30 +97,25 @@ cat /mnt/etc/fstab
 echo "fstab generated..."
 sleep 2
 
-#---------------------------------------------------------------------
-# Mount in arch-chroot /mnt
-#---------------------------------------------------------------------
-
-echo -e "Mounting in archroot..."
-arch-chroot /mnt
 
 #---------------------------------------------------------------------
 #Timezone and hardware clock configuring 
 #---------------------------------------------------------------------
 echo "Setting the timezone to $TIME_ZONE..."
-ln -sf /usr/share/zoneinfo/"$TIME_ZONE" /etc/localtime
-hwclock --systohc
-date
+arch-chroot /mnt ln -sf /usr/share/zoneinfo/"$TIME_ZONE" /etc/localtime
+arch-chroot /mnt wclock --systohc
+arch-chroot /mnt date
 echo "Date configured.."
 sleep 2
 
 #---------------------------------------------------------------------
-# Set up Languege and setting locales 
+# Set up Language and setting locales 
 #---------------------------------------------------------------------
 
-sed -i "s/#$LOCALE/$LOCALE/g" /etc/locale.gen
-locale-gen
+arch-chroot /mnt sed -i "s/#$LOCALE/$LOCALE/g" /etc/locale.gen
+arch-chroot /mnt locale-gen
 echo "LANG=$LOCALE" >> /etc/locale.conf
+export LANG="$LOCALE"
 cat /mnt/etc/locale.conf
 echo "locale.conf configured..."
 sleep 2
@@ -151,22 +146,22 @@ sleep 2
 #---------------------------------------------------------------------
 clear
 echo "Setting ROOT Password..."
-passwd
+arch-chroot /mnt passwd
 
 #---------------------------------------------------------------------
 # Installing more essentials packages
 #---------------------------------------------------------------------
 
 echo -e "Installing system packages.."
-pacman -S "${SYSTEM_PACKAGES[@]}" 
+arch-chroot /mnt pacman -S "${SYSTEM_PACKAGES[@]}" 
 sleep 2
 
 #---------------------------------------------------------------------
 # Grub configuration BIOS
 #---------------------------------------------------------------------
 
-grub-install --target=i386-pc $DEVICE
-grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot /mnt grub-install --target=i386-pc $DEVICE
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 echo -e "Done, The grub installation is completed.."
 sleep 2
 
@@ -174,10 +169,10 @@ sleep 2
 # Enabling the services
 #---------------------------------------------------------------------
 
-systemctl enable bluetooth
-systemctl enable org.cups.cupsd
-systemctl enable NetworkManager
-systemctl enable dhcpcd
+arch-chroot /mnt systemctl enable bluetooth
+arch-chroot /mnt systemctl enable org.cups.cupsd
+arch-chroot /mnt systemctl enable NetworkManager
+arch-chroot /mnt  systemctl enable dhcpcd
 sleep 2
 
 #---------------------------------------------------------------------
@@ -185,11 +180,11 @@ sleep 2
 #---------------------------------------------------------------------
 
 echo "Creating a new user..."
-sed -i 's/# %wheel/%wheel/g' /etc/sudoers
-sed -i 's/%wheel ALL=(ALL) NOPASSWD: ALL/# %wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers
-useradd -m -G wheel "$USER"
+arch-chroot /mnt sed -i 's/# %wheel/%wheel/g' /etc/sudoers
+arch-chroot /mnt sed -i 's/%wheel ALL=(ALL) NOPASSWD: ALL/# %wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers
+arch-chroot /mnt useradd -m -G wheel "$USER"
 echo "Password for $USER?"
-passwd "$USER"
+arch-chroot /mnt passwd "$USER"
 
 echo -e "Done, The installation is completed.. will reboot in 10 seconds"
 sleep 10
