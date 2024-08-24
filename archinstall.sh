@@ -10,25 +10,28 @@
 # Global Variables
 #---------------------------------------------------------------------
 
-DEVICE="dev/sda"
-SWAP = "${DEVICE}1"
-ROOT = "${DEVICE}2"
-USER = "Mt"
-HOSTNAME = "manuelgtm"
+DEVICE="/dev/sda" # Change it later
+SWAP="${DEVICE}1"
+ROOT="${DEVICE}2"
+USER="Mt"
+HOSTNAME="manuelgtm"
 
-SWAP_SIZE=2G
-ROOT_SIZE=
+SWAP_SIZE=2G # Swap has 2GB
+ROOT_SIZE=   # ROOT takes all the remaining space
 TIME_ZONE="America/Santo_Domingo"
 LOCALE="en_US.UTF-8"
 FILESYSTEM=ext4
 
 BASE_SYSTEM=(base base-devel linux linux-firmware amd-ucode vim nano)
+SYSTEM_PACKAGES=(grub networkmanager network-manager-applet wireless_tools wpa_suppllicant dialog os-prober mtools dosfstools base-devel linux-headers bluez bluez-utils cups xdg-utils xdg-user-dirs dhcp)
 
 #---------------------------------------------------------------------
 # Script start
 #---------------------------------------------------------------------
 
+#---------------------------------------------------------------------
 # Check the internet
+#---------------------------------------------------------------------
 
 clear
 echo "Testing the internet connection..."
@@ -36,17 +39,20 @@ $(ping -c 3 archlinux.org &>/dev/null) || (echo "Not Connected to Network" && ex
 echo "Good! We have internet" && sleep 2
 
 
+#---------------------------------------------------------------------
 # Check time and date
+#---------------------------------------------------------------------
+
 timedatectl set-ntp true
 echo && echo "Date/Time service status"
 timedatectl status
-sleep 4
+sleep 2
 
 #---------------------------------------------------------------------
 # Partitioning the disks
 #---------------------------------------------------------------------
 
-cat > tmp/sfdisk.cmd << EOF
+cat > /tmp/sfdisk.cmd << EOF
 $SWAP : start= 2048, size=+$SWAP_SIZE, type=82
 $ROOT : type=83
 EOF
@@ -140,6 +146,7 @@ echo "Finished"
 sleep 2
 
 #---------------------------------------------------------------------
+
 # Root user Password
 #---------------------------------------------------------------------
 clear
@@ -151,7 +158,7 @@ passwd
 #---------------------------------------------------------------------
 
 echo -e "Installing system packages.."
-pacman -S grub networkmanager network-manager-applet wireless_tools wpa_suppllicant dialog os-prober mtools dosfstools base-devel linux-headers bluez bluez-utils cups xdg-utils xdg-user-dirs dhcp
+pacman -S "${SYSTEM_PACKAGES[@]}" 
 sleep 2
 
 #---------------------------------------------------------------------
