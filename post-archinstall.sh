@@ -37,9 +37,9 @@ fi
 echo -e "${CYAN}Installing all the packages...${RESET}"
 
 AUR_PKGS=(
-    'spotify'
-    'obsidian-bin'
-    'onlyoffice'
+    # 'spotify'
+    # 'obsidian-bin'
+    # 'onlyoffice'
     'eww'
 )
 
@@ -139,6 +139,10 @@ picom &
 exec bspwm
 EOF
 fi
+
+echo -e "${CYAN}This is your .xinit file${RESET}"
+cat $XINIT
+sleep 5
 
 echo -e "${GREEN}We have finished configuring your system.${RESET}"
 echo -e "${YELLOW}The system will reboot in 3 seconds...${RESET}"
