@@ -1,89 +1,98 @@
 #!/usr/bin/bash
 
 #--------------------------------------------------
-# This is my post instalation script
+# This is my post-installation script
 #--------------------------------------------------
 
-echo -e "Hello let's get your system ready!!"
+# Color definitions
+RESET='\033[0m'
+BOLD='\033[1m'
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+BLUE='\033[34m'
+MAGENTA='\033[35m'
+CYAN='\033[36m'
 
-echo -e "Upgrading your system before begin.."
-sudo pacman -Syu 
+echo -e "${CYAN}Hello, let's get your system ready!!${RESET}"
+cd $HOME || exit
+
+echo -e "${YELLOW}Upgrading your system before beginning...${RESET}"
+sudo pacman -Syu --noconfirm 
 
 #--------------------------------------------------
-# This is my post instalation script
+# This is my post-installation script
 #--------------------------------------------------
 
-if [-d "paru" ]; then
-    echo -e "Installing AUR helper"
+if [ ! -d "paru" ]; then
+    echo -e "${YELLOW}Installing AUR helper${RESET}"
     git clone https://aur.archlinux.org/paru.git
-    cd paru 
-    makepkg -si
+
+    cd paru || exit
+    makepkg -si --noconfirm
     sleep 2
-    cd $HOME
-else 
-    echo -e "Let's begin..."
-    sleep 3
+    cd $HOME || exit
 fi
 
+echo -e "${CYAN}Installing all the packages...${RESET}"
 
-echo "Installing all the packages..."
+AUR_PKGS=(
+    'spotify'
+    'obsidian-bin'
+    'onlyoffice'
+    'eww'
+)
 
-# AUR_PKGS=(
-#
-#         'spotify'
-#         'obsidian-bin'
-#         'onlyoffice'
-#
-#     )
-#
-# for AUR_PKG in "${AUR_PKGS[@]}"; do
-#     echo "INSTALLING: ${PKG}"
-#     paru -S "$PKG" --noconfirm --needed
-# done
+for AUR_PKG in "${AUR_PKGS[@]}"; do
+    echo -e "${GREEN}INSTALLING: ${AUR_PKG}${RESET}"
+    paru -S "$AUR_PKG" --noconfirm --needed
+done
 
 PACMAN_PKGS=(
-    # XORG
+    # XORG X11
     'xorg'
     'xorg-xinit'
     'xorg-drivers'
+    'base-devel'
     
-    #Desktop
+    # Bspwm Desktop
     'bspwm'
+    'sxhkd'
     'rofi'
     'picom'
     'dunst'
     'polybar'
-    'kitty'
 
-    #Applications
-    'alacritty'
+    # Applications
+    # 'alacritty'
     'kitty'
     # 'dmenu'
     'ranger'
     # 'mpv'
     'fish'
-    'nautilus'
+    # 'nautilus'
     'nitrogen'
-    'starship'
+    # 'starship'
+    'firefox'
 
-    # programming
+    # Programming
     'neovim'
-    'tmux'
-    'nodejs'
-    'npm'
-    'go'
-    'rustc'
+    # 'tmux'
+    # 'nodejs'
+    # 'npm'
+    # 'go'
+    # 'rustc'
     # 'python'
     # 'postgresql'
     # 'git'
 
-    #Random Dependecies
-    'ripgrep'
-    'fzf'
-    'eza'
+    # Terminal Dependencies
+    # 'ripgrep'
+    # 'fzf'
+    # 'eza'
     'fastfetch'
 
-    #Networking
+    # Networking
     'dialog'
     'networkmanager'
     'ufw'
@@ -95,22 +104,46 @@ PACMAN_PKGS=(
     'pavucontrol'
     'pnmixer'
 
-    #bluetooth
+    # Bluetooth
     'bluez'
     'bluez-utils'
     'bluez-libs'
     'pulseaudio-bluetooth'
 )
 
-
-for PKG in "${PKGS[@]}"; do
-    echo "INSTALLING: ${PKG}"
+for PKG in "${PACMAN_PKGS[@]}"; do
+    echo -e "${GREEN}INSTALLING: ${PKG}${RESET}"
     sudo pacman -S "$PKG" --noconfirm --needed
 done
 
 #--------------------------------------------------
-# Installing Tools 
+# Setting the graphical environment
 #--------------------------------------------------
 
-echo "Let's install more tools"
+echo -e "${CYAN}Let's set up your desktop environment...${RESET}"
+
+XINIT="$HOME/.xinitrc"
+
+if [ ! -f "${XINIT}" ]; then
+    cp /etc/X11/xinit/xinitrc $HOME
+fi
+
+for i in {1..5}; do
+    set -i '$d' $XINIT
+done 
+
+if ! grep -q 'nitrogen --restore &' "$XINIT"; then
+    echo -e "${BLUE}Configuring ${XINIT}...${RESET}"
+    cat <<EOF >> "$XINIT"
+nitrogen --restore &
+picom &
+exec bspwm
+EOF
+fi
+
+echo -e "${GREEN}We have finished configuring your system.${RESET}"
+echo -e "${YELLOW}The system will reboot in 3 seconds...${RESET}"
+sleep 3
+
+reboot
 
