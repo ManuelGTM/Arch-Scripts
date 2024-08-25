@@ -125,7 +125,7 @@ echo -e "${CYAN}Let's set up your desktop environment...${RESET}"
 XINIT="$HOME/.xinitrc"
 
 if [ ! -f "${XINIT}" ]; then
-    cp /etc/X11/xinit/xinitrc $HOME
+    cp /etc/X11/xinit/xinitrc $XINIT
 fi
 
 # Remove the last 5 lines from the file
