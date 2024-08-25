@@ -128,9 +128,8 @@ if [ ! -f "${XINIT}" ]; then
     cp /etc/X11/xinit/xinitrc $HOME
 fi
 
-for i in {1..5}; do
-    set -i '$d' $XINIT
-done 
+# Remove the last 5 lines from the file
+sed -i -e :a -e '$d;N;2,5ba' -e 'P;D' "$XINIT"
 
 if ! grep -q 'nitrogen --restore &' "$XINIT"; then
     echo -e "${BLUE}Configuring ${XINIT}...${RESET}"
@@ -146,4 +145,3 @@ echo -e "${YELLOW}The system will reboot in 3 seconds...${RESET}"
 sleep 3
 
 reboot
-
