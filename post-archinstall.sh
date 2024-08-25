@@ -4,8 +4,8 @@
 # This is my post instalation script
 #--------------------------------------------------
 
-
 echo -e "Hello let's get your system ready!!"
+cd $HOME 
 
 echo -e "Upgrading your system before begin.."
 sudo pacman -Syu 
@@ -14,16 +14,13 @@ sudo pacman -Syu
 # This is my post instalation script
 #--------------------------------------------------
 
-if [-d "paru" ]; then
+if [ ! -d "paru" ]; then
     echo -e "Installing AUR helper"
     git clone https://aur.archlinux.org/paru.git
     cd paru 
     makepkg -si
     sleep 2
     cd $HOME
-else 
-    echo -e "Let's begin..."
-    sleep 3
 fi
 
 
@@ -34,7 +31,7 @@ AUR_PKGS=(
         'spotify'
         'obsidian-bin'
         'onlyoffice'
-
+        'eww'
     )
 
 for AUR_PKG in "${AUR_PKGS[@]}"; do
@@ -43,10 +40,11 @@ for AUR_PKG in "${AUR_PKGS[@]}"; do
 done
 
 PACMAN_PKGS=(
-    # XORG
+    # XORG X11
     'xorg'
     'xorg-xinit'
     'xorg-drivers'
+    'base-devel'
     
     #Desktop
     'bspwm'
@@ -66,6 +64,7 @@ PACMAN_PKGS=(
     'nautilus'
     'nitrogen'
     'starship'
+    'firefox'
 
     # programming
     'neovim'
@@ -78,7 +77,7 @@ PACMAN_PKGS=(
     'postgresql'
     'git'
 
-    #Random Dependecies
+    #Terminal Dependecies
     'ripgrep'
     'fzf'
     'eza'
@@ -110,8 +109,25 @@ for PKG in "${PKGS[@]}"; do
 done
 
 #--------------------------------------------------
-# Installing Tools 
+# Setting the graphical environment
 #--------------------------------------------------
 
-echo "Let's install more tools"
+echo "Let's set up your desktop environment.."
+
+XINIT="$HOME/xinitrc"
+
+if [ ! -d "${XINIT}" ]; then
+    cp /etc/X11/xinit/xinitrc $HOME
+fi
+
+for i in {1..5}; do
+    set -i '$d' $XINIT
+done 
+
+cat <<EOF >> $XINIT
+nitrogen --restore &
+picom &
+exec bspwm 
+EOF
+
 

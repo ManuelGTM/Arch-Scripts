@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------
 # After a failure this is a ugraded version of the script
 #---------------------------------------------------------------------
-
+# Successss!!!!!!!!!!!!!!!
 #---------------------------------------------------------------------
 # Global Variables
 #---------------------------------------------------------------------
@@ -22,8 +22,8 @@ TIME_ZONE="America/Santo_Domingo"
 LOCALE="en_US.UTF-8"
 FILESYSTEM=ext4
 
-BASE_SYSTEM=(base base-devel linux linux-firmware amd-ucode vim nano)
-SYSTEM_PACKAGES=(grub networkmanager network-manager-applet wireless_tools wpa_supplicant dialog os-prober mtools dosfstools base-devel linux-headers bluez bluez-utils cups xdg-utils xdg-user-dirs dhcp)
+BASE_SYSTEM=(base base-devel linux linux-firmware)
+SYSTEM_PACKAGES=(grub networkmanager network-manager-applet wireless_tools wpa_supplicant dialog os-prober mtools dosfstools base-devel linux-headers bluez bluez-utils cups xdg-utils xdg-user-dirs)
 
 #---------------------------------------------------------------------
 # Script start
@@ -39,7 +39,7 @@ if ! ping -c 3 archlinux.org &>/dev/null; then
     echo "Not Connected to Network"
     exit 1
 fi
-echo "Good! We have internet" && sleep 2
+echo "Good! We have internet" && sleep 1
 
 #---------------------------------------------------------------------
 # Check time and date
@@ -48,7 +48,7 @@ echo "Good! We have internet" && sleep 2
 timedatectl set-ntp true
 echo && echo "Date/Time service status"
 timedatectl status
-sleep 2
+sleep 1
 
 #---------------------------------------------------------------------
 # Partitioning the disks
@@ -235,13 +235,6 @@ if ! arch-chroot /mnt systemctl enable NetworkManager.service; then
     exit 1
 fi
 
-if ! arch-chroot /mnt systemctl enable dhcpcd; then
-    echo "Failed to enable dhcpcd service"
-    exit 1
-fi
-
-sleep 2
-
 #---------------------------------------------------------------------
 # Creating the new user
 #---------------------------------------------------------------------
@@ -268,10 +261,15 @@ if ! arch-chroot /mnt passwd "$USER"; then
     exit 1
 fi
 
-echo -e "Done, the installation is completed.. will reboot in 10 seconds"
-sleep 10
+echo -e "Done, the installation is completed.. your system will reboot in 5 seconds"
 
-# Unmount and reboot
-umount -R /mnt
+count=5
+
+for ((i=5; i>=1 ;i--)) do
+    echo "$i..."
+    sleep 1
+done
+# unmount and reboot
+umount -r /mnt
 reboot
 
