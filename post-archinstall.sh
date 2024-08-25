@@ -4,7 +4,6 @@
 # This is my post instalation script
 #--------------------------------------------------
 
-
 echo -e "Hello let's get your system ready!!"
 
 echo -e "Upgrading your system before begin.."
@@ -29,18 +28,18 @@ fi
 
 echo "Installing all the packages..."
 
-AUR_PKGS=(
-
-        'spotify'
-        'obsidian-bin'
-        'onlyoffice'
-
-    )
-
-for AUR_PKG in "${AUR_PKGS[@]}"; do
-    echo "INSTALLING: ${PKG}"
-    paru -S "$PKG" --noconfirm --needed
-done
+# AUR_PKGS=(
+#
+#         'spotify'
+#         'obsidian-bin'
+#         'onlyoffice'
+#
+#     )
+#
+# for AUR_PKG in "${AUR_PKGS[@]}"; do
+#     echo "INSTALLING: ${PKG}"
+#     paru -S "$PKG" --noconfirm --needed
+# done
 
 PACMAN_PKGS=(
     # XORG
@@ -59,9 +58,9 @@ PACMAN_PKGS=(
     #Applications
     'alacritty'
     'kitty'
-    'dmenu'
+    # 'dmenu'
     'ranger'
-    'mpv'
+    # 'mpv'
     'fish'
     'nautilus'
     'nitrogen'
@@ -74,9 +73,9 @@ PACMAN_PKGS=(
     'npm'
     'go'
     'rustc'
-    'python'
-    'postgresql'
-    'git'
+    # 'python'
+    # 'postgresql'
+    # 'git'
 
     #Random Dependecies
     'ripgrep'
