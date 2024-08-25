@@ -129,5 +129,27 @@ else
     cd "$Target" || exit
 fi
 
+#--------------------------------------------------------
+# Installing Ly login manager
+#--------------------------------------------------------
+
+cd $HOME || exit
+
+if [ ! -d "ly"]; then
+  git clone https://github.com/fairyglade/ly
+fi
+
+if cd ly; then
+    zig build
+    systemctl enable ly.service
+fi
+
+#--------------------------------------------------------
+#
+#--------------------------------------------------------
+
+
+
+
 echo -e "${CYAN}Done!${RESET}"
 

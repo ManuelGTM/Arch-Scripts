@@ -62,35 +62,38 @@ PACMAN_PKGS=(
     'picom'
     'dunst'
     'polybar'
+    'wget'
+    'curl'
 
     # Applications
-    # 'alacritty'
+    'alacritty'
     'kitty'
-    # 'dmenu'
     'ranger'
-    # 'mpv'
+    'mpv'
     'fish'
-    # 'nautilus'
+
     'nitrogen'
-    # 'starship'
+    'starship'
     'firefox'
+    'yazi'
 
     # Programming
     'neovim'
-    # 'tmux'
-    # 'nodejs'
-    # 'npm'
-    # 'go'
-    # 'rustc'
-    # 'python'
-    # 'postgresql'
-    # 'git'
+    'tmux'
+    'nodejs'
+    'npm'
+    'go'
+    'rustc'
+    'python'
+    'postgresql'
+    'git'
 
     # Terminal Dependencies
-    # 'ripgrep'
-    # 'fzf'
-    # 'eza'
+    'ripgrep'
+    'fzf'
+    'eza'
     'fastfetch'
+    'zig'
 
     # Networking
     'dialog'
@@ -144,8 +147,14 @@ echo -e "${CYAN}This is your .xinit file${RESET}"
 cat $XINIT
 sleep 5
 
-echo -e "${GREEN}We have finished configuring your system.${RESET}"
-echo -e "${YELLOW}The system will reboot in 3 seconds...${RESET}"
-sleep 3
+#------------------------------------------------
+# Activating services
+#------------------------------------------------
 
-reboot
+#TODO... network ly ufw(firewall) etc
+
+echo -e "${GREEN}We have finished configuring your system.${RESET}"
+# echo -e "${YELLOW}The system will reboot in 3 seconds...${RESET}"
+# sleep 3
+
+# reboot
