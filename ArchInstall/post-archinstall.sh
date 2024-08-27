@@ -37,9 +37,9 @@ fi
 echo -e "${CYAN}Installing all the packages...${RESET}"
 
 AUR_PKGS=(
-    # 'spotify'
-    # 'obsidian-bin'
-    # 'onlyoffice'
+    'spotify'
+    'obsidian-bin'
+    'onlyoffice'
     'eww'
 )
 

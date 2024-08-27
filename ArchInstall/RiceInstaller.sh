@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#  ██████╗ ██╗ ██████╗███████╗    ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗
-#  ██╔══██╗██║██╔════╝██╔════╝    ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
-#  ██████╔╝██║██║     █████╗      ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
-#  ██╔══██╗██║██║     ██╔══╝      ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
-#  ██║  ██║██║╚██████╗███████╗    ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
-#  ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝    ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
+#  █████╗ ██████╗  ██████╗██╗  ██╗    ██████╗ ██╗ ██████╗███████╗    ███████╗ ██████╗██████╗ ██╗██████╗ ████████╗
+# ██╔══██╗██╔══██╗██╔════╝██║  ██║    ██╔══██╗██║██╔════╝██╔════╝    ██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝
+# ███████║██████╔╝██║     ███████║    ██████╔╝██║██║     █████╗      ███████╗██║     ██████╔╝██║██████╔╝   ██║   
+# ██╔══██║██╔══██╗██║     ██╔══██║    ██╔══██╗██║██║     ██╔══╝      ╚════██║██║     ██╔══██╗██║██╔═══╝    ██║   
+# ██║  ██║██║  ██║╚██████╗██║  ██║    ██║  ██║██║╚██████╗███████╗    ███████║╚██████╗██║  ██║██║██║        ██║   
+# ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝    ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
 
 CRE=$(tput setaf 1)
 CYE=$(tput setaf 3)
@@ -20,22 +20,16 @@ logo () {
 
     local text="${1:?}"
     echo -en "
-	               %%%
-	        %%%%%//%%%%%
-	      %%************%%%
-	  (%%//############*****%%
-	%%%%%**###&&&&&&&&&###**//
-	%%(**##&&&#########&&&##**
-	%%(**##*****#####*****##**%%%
-	%%(**##     *****     ##**
-	   //##   @@**   @@   ##//
-	     ##     **###     ##
-	     #######     #####//
-	       ###**&&&&&**###
-	       &&&         &&&
-	       &&&////   &&
-	          &&//@@@**
-	            ..***
+
+
+         █████╗ ██████╗  ██████╗██╗  ██╗
+        ██╔══██╗██╔══██╗██╔════╝██║  ██║
+        ███████║██████╔╝██║     ███████║
+        ██╔══██║██╔══██╗██║     ██╔══██║
+        ██║  ██║██║  ██║╚██████╗██║  ██║
+        ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+                                
+
     "
     printf ' %s [%s%s %s%s %s]%s\n\n' "${CRE}" "${CNC}" "${CYE}" "${text}" "${CNC}" "${CRE}" "${CNC}"
 }
@@ -157,7 +151,7 @@ for folder in bspwm alacritty picom rofi eww sxhkd dunst kitty polybar ncmpcpp r
             sleep 1
         else
             printf "%s%sFailed to backup %s folder. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "$folder" "${CBL}" "${CNC}"
-            sleep 1
+            sleep c
         fi
     else
         printf "%s%s%s folder does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "$folder" "${CYE}" "${CNC}"
@@ -179,40 +173,6 @@ if [[ $try_nvim == "y" ]]; then
             printf "%s%snvim folder does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
             sleep 1
     fi
-fi
-
-for folder in "$HOME"/.mozilla/firefox/*.default-release/chrome; do
-    if [ -d "$folder" ]; then
-        if mv "$folder" "$backup_folder"/chrome_"$date" 2>> RiceError.log; then
-            printf "%s%sChrome folder backed up successfully at %s%s/chrome_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
-        else
-            printf "%s%sFailed to backup Chrome folder. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
-        fi
-    else
-        printf "%s%sThe folder Chrome does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
-    fi
-done
-
-for file in "$HOME"/.mozilla/firefox/*.default-release/user.js; do
-    if [ -f "$file" ]; then
-        if mv "$file" "$backup_folder"/user.js_"$date" 2>> RiceError.log; then
-            printf "%s%suser.js file backed up successfully at %s%s/user.js_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
-        else
-            printf "%s%sFailed to backup user.js file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
-        fi
-    else
-        printf "%s%sThe file user.js does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
-    fi
-done
-
-if [ -f ~/.zshrc ]; then
-    if mv ~/.zshrc "$backup_folder"/.zshrc_"$date" 2>> RiceError.log; then
-        printf "%s%s.zshrc file backed up successfully at %s%s/.zshrc_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
-    else
-        printf "%s%sFailed to backup .zshrc file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
-    fi
-else
-    printf "%s%sThe file .zshrc does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
 fi
 
 printf "%s%sDone!!%s\n\n" "${BLD}" "${CGR}" "${CNC}"
@@ -259,19 +219,6 @@ else
     printf "%s%sbin %sfolder failed to been copied, see %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
     sleep 1
 fi
-
-if cp -R ~/dotfiles/misc/firefox/* ~/.mozilla/firefox/*.default-release/ 2>> RiceError.log; then
-    printf "%s%sFirefox theme %scopied succesfully!%s\n" "${BLD}" "${CYE}" "${CGR}" "${CNC}"
-    sleep 1
-else
-    printf "%s%sFirefox theme %sfailed to been copied, see %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
-    sleep 1
-fi
-
-sed -i "s/user_pref(\"browser.startup.homepage\", \"file:\/\/\/home\/z0mbi3\/.local\/share\/startup-page\/index.html\")/user_pref(\"browser.startup.homepage\", \"file:\/\/\/home\/$USER\/.local\/share\/startup-page\/index.html\")/" "$HOME"/.mozilla/firefox/*.default-release/user.js
-sed -i "s/name: 'gh0stzk'/name: '$USER'/" "$HOME"/.local/share/startup-page/config.js
-cp -f "$HOME"/dotfiles/home/.zshrc "$HOME"
-fc-cache -rv >/dev/null 2>&1
 
 printf "\n\n%s%sFiles copied succesfully!!%s\n" "${BLD}" "${CGR}" "${CNC}"
 sleep 5
@@ -374,14 +321,14 @@ sleep 2
 
 ########## --------- Changing shell to zsh ---------- ##########
 
-logo "Changing default shell to zsh"
+logo "Changing default shell to fish"
 
-if [[ $SHELL != "/usr/bin/zsh" ]]; then
-    printf "\n%s%sChanging your shell to zsh. Your root password is needed.%s\n\n" "${BLD}" "${CYE}" "${CNC}"
+if [[ $SHELL != "/usr/bin/fish" ]]; then
+    printf "\n%s%sChanging your shell to fish. Your root password is needed.%s\n\n" "${BLD}" "${CYE}" "${CNC}"
     # Cambia la shell a zsh
-    chsh -s /usr/bin/zsh
-    printf "%s%sShell changed to zsh. Please reboot.%s\n\n" "${BLD}" "${CGR}" "${CNC}"
+    chsh -s /usr/bin/fish
+    printf "%s%sShell changed to fish. Please reboot.%s\n\n" "${BLD}" "${CGR}" "${CNC}"
 else
-    printf "%s%sYour shell is already zsh\nGood bye! installation finished, now reboot%s\n" "${BLD}" "${CGR}" "${CNC}"
+    printf "%s%sYour shell is already fish\nGood bye! installation finished, now reboot%s\n" "${BLD}" "${CGR}" "${CNC}"
 fi
 zsh
