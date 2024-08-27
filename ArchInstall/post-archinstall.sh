@@ -71,6 +71,7 @@ PACMAN_PKGS=(
     'ranger'
     'mpv'
     'fish'
+    'zoxide'
 
     'nitrogen'
     'starship'
@@ -119,6 +120,23 @@ for PKG in "${PACMAN_PKGS[@]}"; do
     sudo pacman -S "$PKG" --noconfirm --needed
 done
 
+#--------------------------------------------------------
+# Installing Ly login manager
+#--------------------------------------------------------
+
+cd $HOME || exit
+
+if [ ! -d "ly"]; then
+  git clone https://github.com/fairyglade/ly
+fi
+
+if cd ly; then
+    zig build
+    systemctl enable ly.service
+fi
+
+cd $HOME || exit
+
 #--------------------------------------------------
 # Setting the graphical environment
 #--------------------------------------------------
@@ -152,6 +170,25 @@ sleep 5
 #------------------------------------------------
 
 #TODO... network ly ufw(firewall) etc
+
+#--------------------------------------------------
+# Activating UFW
+#--------------------------------------------------
+echo -e "${CYAN}Activating UFW...${RESET}"
+sudo ufw enable
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+#--------------------------------------------------
+# Cleaning pacman cache
+#--------------------------------------------------
+echo -e "${CYAN}Cleaning pacman cache...${RESET}"
+sudo pacman -Scc --noconfirm
+
+#--------------------------------------------------------
+#
+#--------------------------------------------------------
+
 
 echo -e "${GREEN}We have finished configuring your system.${RESET}"
 # echo -e "${YELLOW}The system will reboot in 3 seconds...${RESET}"
